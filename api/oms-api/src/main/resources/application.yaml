@@ -2,6 +2,9 @@
 spring:
   application:
     name: scm-oms-api
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
   cloud:
     nacos:
       config:
@@ -19,8 +22,10 @@ user:
   password:
     maxRetryCount: 5 #密码最大错误次数
     lockTime: 10 #密码锁定时间（默认10分钟）
+
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   type-aliases-package: cn.qihangerp.api.domain;com.qihangerp.api.common.security;cn.qihangerp.model.goods.domain;
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志
+
