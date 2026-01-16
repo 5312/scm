@@ -12,7 +12,6 @@ spring:
     import:
       - nacos:qihangerp-scm.yaml?refresh=true
 
-
 server:
   port: 8084
 user:

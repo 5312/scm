@@ -2,7 +2,7 @@ server:
   port: 8089
 spring:
   application:
-    name: scm-gateway
+    name: gateway
 #  security:
 #    user:
 #      name: admin
@@ -30,10 +30,10 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: oms_api_route
-          uri: lb://scm-oms-api
+        - id: scm_api_route
+          uri: lb://scm-api
           predicates:
-            - Path=/scm-oms-api/**
+            - Path=/scm-api/**
           filters:
             - StripPrefix=1
 
@@ -45,9 +45,9 @@ spring:
             - StripPrefix=1
 
         - id: vms_api_route
-          uri: lb://scm-vms-api
+          uri: lb://vms-api
           predicates:
-            - Path=/scm-vms-api/**
+            - Path=/vms-api/**
           filters:
             - StripPrefix=1
 
