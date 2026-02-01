@@ -1,0 +1,104 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: qihang-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: qihangerp-scm
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./docs/qihangerp-scm.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:alpine
+    container_name: qihang-redis
+    restart: always
+
+  scm-api:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: qihang-scm-api
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - ./scm-api-config.yaml:/app/application.yaml
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/qihangerp-scm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATA_REDIS_HOST: redis
+
+  mms-api:
+    build:
+      context: .
+      dockerfile: mms-backend.Dockerfile
+    container_name: qihang-mms-api
+    restart: always
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/qihangerp-scm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATA_REDIS_HOST: redis
+
+  vms-api:
+    build:
+      context: .
+      dockerfile: vms-backend.Dockerfile
+    container_name: qihang-vms-api
+    restart: always
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/qihangerp-scm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATA_REDIS_HOST: redis
+
+  vue-scm:
+    build:
+      context: ./ux/vue-scm
+      dockerfile: Dockerfile
+    container_name: qihang-vue-scm
+    restart: always
+    ports:
+      - "8000:80"
+    depends_on:
+      - scm-api
+
+  vue-mms:
+    build:
+      context: ./ux/vue-mms
+      dockerfile: Dockerfile
+    container_name: qihang-vue-mms
+    restart: always
+    ports:
+      - "8001:80"
+    depends_on:
+      - mms-api
+
+  vue-vms:
+    build:
+      context: ./ux/vue-vms
+      dockerfile: Dockerfile
+    container_name: qihang-vue-vms
+    restart: always
+    ports:
+      - "8002:80"
+    depends_on:
+      - vms-api

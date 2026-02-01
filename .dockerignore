@@ -1,0 +1,9 @@
+.git
+.mvn
+target/
+*.jar
+*.war
+mysql-data/
+ux/
+node_modules/
+.DS_Store

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: scm-api
+  messages:
+    basename: i18n/messages
+
+server:
+  port: 8081
+
+user:
+  password:
+    maxRetryCount: 5
+    lockTime: 10
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: cn.qihangerp.api.domain;com.qihangerp.api.common.security;cn.qihangerp.model.goods.domain;
