@@ -11,11 +11,30 @@ services:
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./docs/qihangerp-scm.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password --innodb_buffer_pool_size=512M --max_connections=100
+    deploy:
+      resources:
+        limits:
+          memory: 1.2G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:alpine
     container_name: qihang-redis
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   scm-api:
     build:
@@ -35,6 +54,16 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_DATA_REDIS_HOST: redis
+      JAVA_OPTS: "-Xmx1024m -Xms512m -XX:+UseG1GC"
+    deploy:
+      resources:
+        limits:
+          memory: 1.8G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   mms-api:
     build:
@@ -52,6 +81,16 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_DATA_REDIS_HOST: redis
+      JAVA_OPTS: "-Xmx1024m -Xms512m -XX:+UseG1GC"
+    deploy:
+      resources:
+        limits:
+          memory: 1.8G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   vms-api:
     build:
@@ -69,6 +108,16 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_DATA_REDIS_HOST: redis
+      JAVA_OPTS: "-Xmx1024m -Xms512m -XX:+UseG1GC"
+    deploy:
+      resources:
+        limits:
+          memory: 1.8G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   vue-scm:
     build:
@@ -76,6 +125,15 @@ services:
       dockerfile: Dockerfile
     container_name: qihang-vue-scm
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     ports:
       - "8000:80"
     depends_on:
@@ -87,6 +145,15 @@ services:
       dockerfile: Dockerfile
     container_name: qihang-vue-mms
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     ports:
       - "8001:80"
     depends_on:
@@ -98,6 +165,15 @@ services:
       dockerfile: Dockerfile
     container_name: qihang-vue-vms
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     ports:
       - "8002:80"
     depends_on:

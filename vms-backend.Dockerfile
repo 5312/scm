@@ -19,4 +19,4 @@ ENV SPRING_CLOUD_NACOS_CONFIG_ENABLED=false \
     SPRING_DATA_REDIS_HOST=redis
 
 EXPOSE 8083
-CMD ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Djava.awt.headless=true -jar app.jar"]
