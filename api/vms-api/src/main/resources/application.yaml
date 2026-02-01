@@ -5,15 +5,15 @@ spring:
   messages:
     # 国际化资源文件路径
     basename: i18n/messages
-  cloud:
-    nacos:
-      config:
-        server-addr: 127.0.0.1:8848
-      discovery:
-        server-addr: 127.0.0.1:8848
-  config:
-    import:
-      - nacos:qihangerp-scm.yaml?refresh=true
+#  cloud:
+#    nacos:
+#      config:
+#        server-addr: 127.0.0.1:8848
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+#  config:
+#    import:
+#      - nacos:qihangerp-scm.yaml?refresh=true
 
 server:
   port: 8083
